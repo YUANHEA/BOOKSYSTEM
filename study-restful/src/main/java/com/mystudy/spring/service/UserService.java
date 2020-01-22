@@ -25,7 +25,7 @@ public class UserService
 //    用户注册
     public Object addUser(String username,String password,String email)
     {
-        if(userRepository.findByUsername(username)!=null){
+        if(userRepository.findByUsername(username)==null){
             User user =new User();
             user.setEmail(email);
             user.setPassword(password);
