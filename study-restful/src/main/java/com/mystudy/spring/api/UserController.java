@@ -41,7 +41,7 @@ public class UserController
     @PostMapping(value = "/user/register")
     public Result userRegister(@RequestBody User user){
         if(userService.addUser(user)!=null){
-            return  Result.error(0,"校验成功");
+            return  Result.error(0,"注册成功");
         }else{
             return Result.error(1,"用户名已存在");
         }
