@@ -33,7 +33,7 @@ public class UserController
             System.out.println(session);
             return  Result.success(user);
         }else{
-            return Result.error(1,"密码错误");
+            return Result.error(1,"密码或用户名错误");
         }
     }
 
@@ -43,7 +43,7 @@ public class UserController
         if(userService.addUser(user)!=null){
             return  Result.error(0,"校验成功");
         }else{
-            return Result.error(1,"用户已存在");
+            return Result.error(1,"用户名已存在");
         }
     }
 
