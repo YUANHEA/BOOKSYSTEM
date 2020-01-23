@@ -3,6 +3,7 @@ package com.mystudy.spring.service;
 import com.mystudy.spring.domain.User;
 import com.mystudy.spring.exception.NotFoundException;
 import com.mystudy.spring.exception.myResult;
+import com.mystudy.spring.form.UserLoginForm;
 import com.mystudy.spring.repository.UserRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,18 +19,16 @@ public class UserService
     @Autowired
     private UserRepository userRepository;
 
-    public Object findByUsernameAndPassword(String username ,String password){
+    public Object login(UserLoginForm userLoginForm){
+        String username = userLoginForm.getUsername();
+        String password = userLoginForm.getPassword();
         return  userRepository.findByUsernameAndPassword(username,password);
     }
 
 //    用户注册
-    public Object addUser(String username,String password,String email)
+    public Object addUser(User user)
     {
-        if(userRepository.findByUsername(username)==null){
-            User user =new User();
-            user.setEmail(email);
-            user.setPassword(password);
-            user.setUsername(username);
+        if(userRepository.findByUsername(user.getUsername())==null){
             return userRepository.save(user);
         }else{
             return null;

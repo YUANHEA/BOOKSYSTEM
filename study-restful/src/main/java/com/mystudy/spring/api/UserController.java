@@ -1,21 +1,18 @@
 package com.mystudy.spring.api;
 
-import com.mystudy.spring.domain.User;
-import com.mystudy.spring.exception.NotFoundException;
 import com.fengwenyi.javalib.result.Result;
+import com.mystudy.spring.domain.User;
 import com.mystudy.spring.exception.myResult;
+import com.mystudy.spring.form.UserLoginForm;
 import com.mystudy.spring.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpSession;
-import java.util.Date;
-import java.util.List;
+import java.util.Map;
+
 
 @RestController
 //@RequestMapping("/user")
@@ -26,28 +23,24 @@ public class UserController
 
     @ApiOperation(value="用户登录", notes="用户登录")
     @PostMapping(value = "/user/login")
-    public Result userLogin(@RequestParam("username")String username,@RequestParam("password")
-                            String password,HttpServletRequest request){
-        User user = (User)userService.findByUsernameAndPassword(username,password);
+    public Result userLogin(@RequestBody UserLoginForm userLoginform,HttpServletRequest request){
+        User user = (User)userService.login(userLoginform);
+        System.out.println(userLoginform.toString());
         if(user!=null){
             HttpSession session = request.getSession();
-            session.setAttribute("id",user.getId());
-            session.setAttribute("username",user.getUsername());
-            session.setAttribute("isLogin",true);
-            session.setAttribute("loginTime",new Date());
+            user.setPassword("null");
+            session.setAttribute("userdata",user);
             System.out.println(session);
             return  Result.success(user);
         }else{
             return Result.error(1,"密码错误");
         }
-
     }
 
     @ApiOperation(value="用户注册", notes="用户注册")
     @PostMapping(value = "/user/register")
-    public Result userRegister(@RequestParam("username")String username,@RequestParam("password")
-            String password,@RequestParam("email") String email){
-        if(userService.addUser(username,password,email)!=null){
+    public Result userRegister(@RequestBody User user){
+        if(userService.addUser(user)!=null){
             return  Result.error(0,"校验成功");
         }else{
             return Result.error(1,"用户已存在");
@@ -56,21 +49,17 @@ public class UserController
 
     @ApiOperation(value="获取登录用户信息", notes="获取登录用户信息")
     @GetMapping(value = "/user")
-    public Result userInfo(HttpServletRequest request){
-        HttpSession session=request.getSession();
-        if((boolean)session.getAttribute("isLogin")){
-            return Result.success(userService.findByUsername((String)session.getAttribute("username")));
-        }else{
-            return Result.error(1,"用户未登录,无法获取当前用户信息");
-        }
-    }
+    public Result userInfo(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        return Result.success(session.getAttribute("userdata"));
 
+    }
     @ApiOperation(value="退出登录", notes="退出登录")
-    @DeleteMapping(value = "/user/logout")
+    @PostMapping(value = "/user/logout")
     public Result logout(HttpServletRequest request){
         try {
             HttpSession session = request.getSession();
-            session.invalidate();
+            session.removeAttribute("userdata");
         }catch (Exception e){
             return Result.error(1,"服务器异常");
         }finally {
