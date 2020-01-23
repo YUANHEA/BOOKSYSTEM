@@ -13,7 +13,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import java.util.Map;
 
-
+/**
+ * 用户控制
+ * 门户_用户接口
+ * **/
 @RestController
 //@RequestMapping("/user")
 public class UserController
