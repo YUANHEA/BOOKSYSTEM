@@ -1,6 +1,7 @@
 package com.mystudy.spring.api;
 
 import com.fengwenyi.javalib.result.Result;
+import com.mystudy.spring.ApiConst.ApiConst;
 import com.mystudy.spring.domain.User;
 import com.mystudy.spring.exception.myResult;
 import com.mystudy.spring.form.UserLoginForm;
@@ -32,7 +33,7 @@ public class UserController
         if(user!=null){
             HttpSession session = request.getSession();
             user.setPassword("null");
-            session.setAttribute("userdata",user);
+            session.setAttribute(ApiConst.USER_DATA,user);
             System.out.println(session);
             return  Result.success(user);
         }else{
@@ -54,7 +55,7 @@ public class UserController
     @GetMapping(value = "/user")
     public Result userInfo(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        return Result.success(session.getAttribute("userdata"));
+        return Result.success(session.getAttribute(ApiConst.USER_DATA));
 
     }
     @ApiOperation(value="退出登录", notes="退出登录")
@@ -112,9 +113,9 @@ public class UserController
 
     @ApiOperation(value="测试")
     @GetMapping(value = "/test")
-    public myResult test()
+    public Result test()
     {
-        return myResult.success(0,"校验成功");
+        return Result.success();
     }
 
     @ApiOperation(value="测试")

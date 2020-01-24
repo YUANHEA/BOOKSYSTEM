@@ -1,5 +1,6 @@
 package com.mystudy.spring.interceptor;
 
+import com.mystudy.spring.ApiConst.ApiConst;
 import com.mystudy.spring.domain.User;
 import com.mystudy.spring.exception.UserLoginException;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +15,7 @@ public class UserLoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse httpServletResponse, Object o) throws Exception {
         System.out.println("preHandle...");
-        User user = (User) request.getSession().getAttribute("userdata");
+        User user = (User) request.getSession().getAttribute(ApiConst.USER_DATA);
         if (user == null) {
             System.out.println("user=null");
             throw new UserLoginException();
