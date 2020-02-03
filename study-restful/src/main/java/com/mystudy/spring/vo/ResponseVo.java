@@ -24,6 +24,11 @@ public class ResponseVo<T> {
         this.msg=msg;
     }
 
+    public ResponseVo(Integer status, T data) {
+        this.status = status;
+        this.data = data;
+    }
+
     public static <T> ResponseVo<T> success(Integer code, String msg){
         return new ResponseVo<>(code,msg);
     }
@@ -33,6 +38,14 @@ public class ResponseVo<T> {
     }
 
     public static <T> ResponseVo<T> success(ResponseEnum responseEnum){
+        return new ResponseVo<>(responseEnum.getCode(),responseEnum.getMsg());
+    }
+
+    public static <T> ResponseVo<T> success(T data) {
+        return new ResponseVo<>(ResponseEnum.SUCCESS.getCode(), data);
+    }
+
+    public static <T> ResponseVo<T> error(ResponseEnum responseEnum){
         return new ResponseVo<>(responseEnum.getCode(),responseEnum.getMsg());
     }
 
