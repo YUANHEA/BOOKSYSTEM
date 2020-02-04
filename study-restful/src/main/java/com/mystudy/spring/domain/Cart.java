@@ -16,4 +16,7 @@ public class Cart {
         this.quantity = quantity;
         this.bookSelected = bookSelected;
     }
+
+    public Cart() {
+    }
 }

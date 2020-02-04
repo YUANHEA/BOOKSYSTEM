@@ -1,6 +1,8 @@
 package com.mystudy.spring.exception;
 
 import com.fengwenyi.javalib.result.Result;
+import com.mystudy.spring.enums.ResponseEnum;
+import com.mystudy.spring.vo.ResponseVo;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -11,7 +13,7 @@ public class RuntimeExceptionHandler {
 
     @ExceptionHandler(UserLoginException.class)
     @ResponseBody
-    public Result userLoginHandle(){
-        return Result.error(10,"用户未登陆");
+    public ResponseVo userLoginHandle(){
+        return ResponseVo.error(ResponseEnum.NEED_LOGIN);
     }
 }

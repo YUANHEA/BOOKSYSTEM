@@ -7,15 +7,19 @@ import com.mystudy.spring.domain.Cart;
 import com.mystudy.spring.enums.BookStatusEnum;
 import com.mystudy.spring.enums.ResponseEnum;
 import com.mystudy.spring.form.CartAddForm;
+import com.mystudy.spring.form.CartUpdateForm;
 import com.mystudy.spring.repository.CartRepository;
 import com.mystudy.spring.domain.CartBookVo;
 import com.mystudy.spring.vo.CartVo;
 import com.mystudy.spring.vo.ResponseVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
+
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+
+import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,15 +34,15 @@ public class CartService {
     @Autowired
     private CartRepository cartRepository;
 
-//    @Autowired
-    private StringRedisTemplate redisTemplate;
+    @Autowired
+    public StringRedisTemplate stringRedisTemplate;
 
 
     private JSONObject object = new JSONObject();
 
 
     public ResponseVo<CartVo> list(Integer uid){
-        HashOperations<String, String, String> opsForHash = redisTemplate.opsForHash();
+        HashOperations<String, String, String> opsForHash = stringRedisTemplate.opsForHash();
         String redisKey  = String.format(CART_REDIS_KEY_TEMPLATE, uid);
         Map<String, String> entries = opsForHash.entries(redisKey);
 
@@ -49,10 +53,12 @@ public class CartService {
         List<CartBookVo> cartBookVoList = new ArrayList<>();
         for (Map.Entry<String, String> entry : entries.entrySet()) {
             Integer bookId = Integer.valueOf(entry.getKey());
-            JSONObject obj = JSON.parseObject(entry.getValue());
-            Cart cart = (Cart)obj.get(Cart.class);
+//            JSONObject obj = JSON.parseObject(entry.getValue());
+            Cart cart = JSON.parseObject(entry.getValue(),Cart.class);
 
-            Book book =(Book) cartRepository.findByBookId(bookId);
+            System.out.println("list_cart:"+cart);
+
+            CartBookVo book = cartRepository.findOne(bookId);
             if(book != null){
                 CartBookVo cartBookVo = new CartBookVo(bookId,
                         cart.getQuantity(),
@@ -92,7 +98,8 @@ public class CartService {
     public ResponseVo<CartVo> add(Integer uid, CartAddForm form){
         Integer quantity = 1;
 
-        Book book = (Book)cartRepository.findByBookId(form.getBookId());
+        CartBookVo book = cartRepository.findOne(form.getBookId());
+        System.out.println(book);
 
         if (book == null) {
             return ResponseVo.error(ResponseEnum.PRODUCT_NOT_EXIST);
@@ -108,7 +115,7 @@ public class CartService {
             return ResponseVo.error(ResponseEnum.PROODUCT_STOCK_ERROR);
         }
 
-        HashOperations<String, String, String> opsForHash = redisTemplate.opsForHash();
+        HashOperations<String, String, String> opsForHash = stringRedisTemplate.opsForHash();
         String redisKey  = String.format(CART_REDIS_KEY_TEMPLATE, uid);
 
         Cart cart;
@@ -118,8 +125,10 @@ public class CartService {
             cart = new Cart(book.getBookId(), quantity, form.getSelected());
         }else {
             //已经有了，数量+1
-            object = JSON.parseObject(value);
-            cart = (Cart)object.get(Cart.class);
+//            object = JSON.parseObject(value);
+//            cart = (Cart)object.get(Cart.class);
+            cart = JSON.parseObject(value,Cart.class);
+
             cart.setQuantity(cart.getQuantity() + quantity);
         }
 
@@ -129,5 +138,88 @@ public class CartService {
         return list(uid);
     }
 
+    public ResponseVo<CartVo> update(Integer uid, Integer bookId, CartUpdateForm form){
+        HashOperations<String, String, String> opsForHash = stringRedisTemplate.opsForHash();
+        String redisKey  = String.format(CART_REDIS_KEY_TEMPLATE, uid);
 
+        String value = opsForHash.get(redisKey, String.valueOf(bookId));
+        if (StringUtils.isEmpty(value)) {
+            //没有该商品, 报错
+            return ResponseVo.error(ResponseEnum.CART_PRODUCT_NOT_EXIST);
+        }
+
+        //已经有了，修改内容
+        Cart cart = JSON.parseObject(value,Cart.class);
+        if (form.getQuantity() != null
+                && form.getQuantity() >= 0) {
+            cart.setQuantity(form.getQuantity());
+        }
+        if (form.getSelected() != null) {
+            cart.setBookSelected(form.getSelected());
+        }
+        opsForHash.put(redisKey, String.valueOf(bookId), JSON.toJSONString(cart));
+        return list(uid);
+    }
+
+    public ResponseVo<CartVo> delete(Integer uid, Integer bookId) {
+        HashOperations<String, String, String> opsForHash = stringRedisTemplate.opsForHash();
+        String redisKey  = String.format(CART_REDIS_KEY_TEMPLATE, uid);
+
+        String value = opsForHash.get(redisKey, String.valueOf(bookId));
+        if (StringUtils.isEmpty(value)) {
+            //没有该商品, 报错
+            return ResponseVo.error(ResponseEnum.CART_PRODUCT_NOT_EXIST);
+        }
+
+        opsForHash.delete(redisKey, String.valueOf(bookId));
+        return list(uid);
+    }
+
+    public ResponseVo<CartVo> selectAll(Integer uid) {
+        HashOperations<String, String, String> opsForHash = stringRedisTemplate.opsForHash();
+        String redisKey  = String.format(CART_REDIS_KEY_TEMPLATE, uid);
+
+        for (Cart cart : listForCart(uid)) {
+            cart.setBookSelected(true);
+            opsForHash.put(redisKey,
+                    String.valueOf(cart.getBookId()),
+                    JSON.toJSONString(cart));
+        }
+
+        return list(uid);
+    }
+
+    public ResponseVo<CartVo> unSelectAll(Integer uid) {
+        HashOperations<String, String, String> opsForHash = stringRedisTemplate.opsForHash();
+        String redisKey  = String.format(CART_REDIS_KEY_TEMPLATE, uid);
+
+        for (Cart cart : listForCart(uid)) {
+            cart.setBookSelected(false);
+            opsForHash.put(redisKey,
+                    String.valueOf(cart.getBookId()),
+                    JSON.toJSONString(cart));
+        }
+
+        return list(uid);
+    }
+
+    public ResponseVo<Integer> sum(Integer uid) {
+        Integer sum = listForCart(uid).stream()
+                .map(Cart::getQuantity)
+                .reduce(0, Integer::sum);
+        return ResponseVo.success(sum);
+    }
+
+    public List<Cart> listForCart(Integer uid) {
+        HashOperations<String, String, String> opsForHash = stringRedisTemplate.opsForHash();
+        String redisKey  = String.format(CART_REDIS_KEY_TEMPLATE, uid);
+        Map<String, String> entries = opsForHash.entries(redisKey);
+
+        List<Cart> cartList = new ArrayList<>();
+        for (Map.Entry<String, String> entry : entries.entrySet()) {
+            cartList.add(JSON.parseObject(entry.getValue(), Cart.class));
+        }
+
+        return cartList;
+    }
 }

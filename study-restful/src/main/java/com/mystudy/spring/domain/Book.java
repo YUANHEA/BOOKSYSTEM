@@ -13,7 +13,7 @@ import java.util.Date;
 @Data
 @EntityListeners(AuditingEntityListener.class)
 @Entity
-@Table(name = "book_volist")
+//@Table(name = "book_volist")
 public class Book {
 
     @Id
@@ -43,7 +43,7 @@ public class Book {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "createTime")
+    @Column(name = "createtime")
     private Date createTime;
 
     //    前台正常时间戳

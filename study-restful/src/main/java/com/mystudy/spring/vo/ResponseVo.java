@@ -29,6 +29,8 @@ public class ResponseVo<T> {
         this.data = data;
     }
 
+
+
     public static <T> ResponseVo<T> success(Integer code, String msg){
         return new ResponseVo<>(code,msg);
     }
@@ -47,6 +49,10 @@ public class ResponseVo<T> {
 
     public static <T> ResponseVo<T> error(ResponseEnum responseEnum){
         return new ResponseVo<>(responseEnum.getCode(),responseEnum.getMsg());
+    }
+
+    public static <T> ResponseVo<T> error(Integer code, String msg){
+        return new ResponseVo<>(code,msg);
     }
 
 }
