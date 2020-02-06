@@ -1,23 +1,18 @@
 package com.mystudy.spring.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.Date;
 
 @Data
-@EntityListeners(AuditingEntityListener.class)
-@Entity
-@Table(name = "book_volist")
 public class CartBookVo {
 
 
-    @Id
-    @NotNull
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "bookId")
     private int bookId;
 
     /**
@@ -25,20 +20,40 @@ public class CartBookVo {
      */
     private Integer quantity;
 
-    @Column(name = "bookName")
     private String bookName;
 
-    @Column(name = "bookSubtitle")
-    private String bookSubtitle;
+    //    图片地址
+    private String cover;
 
-    @Column(name = "bookMainImage")
-    private String bookMainImage;
+    private BigDecimal price;
 
-    @Column(name = "bookPrice")
-    private BigDecimal bookPrice;
+    //    简介
+    private String intro;
 
-    @Column(name = "bookStatus")
-    private Integer bookStatus;
+    private String auther;
+
+    //    出版社
+    private String press;
+
+    //    发行时间
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone="GMT+8")
+    private Date pubdate;
+
+    //    总数量
+    private Integer stock;
+
+    //
+    private Integer special;
+
+    //
+    private Integer news;
+
+    //
+    private Integer sale;
+
+    //销售状态
+    private Integer status;
+
 
     /**
      * 等于 quantity * productPrice
@@ -46,7 +61,6 @@ public class CartBookVo {
     @Column(name = "bookTotalPrice")
     private BigDecimal bookTotalPrice;
 
-    @Column(name = "bookStock")
     private Integer bookStock;
 
     /**
@@ -58,14 +72,21 @@ public class CartBookVo {
     public CartBookVo() {
     }
 
-    public CartBookVo(Integer bookId, Integer quantity, String bookName, String bookSubtitle, String bookMainImage, BigDecimal bookPrice, Integer bookStatus, BigDecimal bookTotalPrice, Integer bookStock, Boolean bookSelected) {
+    public CartBookVo(int bookId, Integer quantity, String bookName, String cover, BigDecimal price, String intro, String auther, String press, Date pubdate, Integer stock, Integer special, Integer news, Integer sale, Integer status, BigDecimal bookTotalPrice, Integer bookStock, Boolean bookSelected) {
         this.bookId = bookId;
         this.quantity = quantity;
         this.bookName = bookName;
-        this.bookSubtitle = bookSubtitle;
-        this.bookMainImage = bookMainImage;
-        this.bookPrice = bookPrice;
-        this.bookStatus = bookStatus;
+        this.cover = cover;
+        this.price = price;
+        this.intro = intro;
+        this.auther = auther;
+        this.press = press;
+        this.pubdate = pubdate;
+        this.stock = stock;
+        this.special = special;
+        this.news = news;
+        this.sale = sale;
+        this.status = status;
         this.bookTotalPrice = bookTotalPrice;
         this.bookStock = bookStock;
         this.bookSelected = bookSelected;

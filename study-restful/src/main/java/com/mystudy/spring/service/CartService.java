@@ -58,17 +58,24 @@ public class CartService {
 
             System.out.println("list_cart:"+cart);
 
-            CartBookVo book = cartRepository.findOne(bookId);
+            Book book = cartRepository.findOne(bookId);
             if(book != null){
                 CartBookVo cartBookVo = new CartBookVo(bookId,
                         cart.getQuantity(),
-                        book.getBookName(),
-                        book.getBookSubtitle(),
-                        book.getBookMainImage(),
-                        book.getBookPrice(),
-                        book.getBookStatus(),
-                        book.getBookPrice().multiply(BigDecimal.valueOf(cart.getQuantity())),
-                        book.getBookStock(),
+                        book.getName(),
+                        book.getCover(),
+                        book.getPrice(),
+                        book.getIntro(),
+                        book.getAuther(),
+                        book.getPress(),
+                        book.getPubdate(),
+                        book.getStock(),
+                        book.getSpecial(),
+                        book.getNews(),
+                        book.getSale(),
+                        book.getStatus(),
+                        book.getPrice().multiply(BigDecimal.valueOf(cart.getQuantity())),
+                        book.getStock(),
                         cart.getBookSelected()
                 );
                 cartBookVoList.add(cartBookVo);
@@ -98,7 +105,7 @@ public class CartService {
     public ResponseVo<CartVo> add(Integer uid, CartAddForm form){
         Integer quantity = 1;
 
-        CartBookVo book = cartRepository.findOne(form.getBookId());
+        Book book = cartRepository.findOne(form.getBookId());
         System.out.println(book);
 
         if (book == null) {
@@ -106,12 +113,12 @@ public class CartService {
         }
 
         //商品是否正常在售
-        if (!book.getBookStatus().equals(BookStatusEnum.ON_SALE.getCode())) {
+        if (!book.getStatus().equals(BookStatusEnum.ON_SALE.getCode())) {
             return ResponseVo.error(ResponseEnum.PRODUCT_OFF_SALE_OR_DELETE);
         }
 
         //商品库存是否充足
-        if (book.getBookStock() <= 0) {
+        if (book.getStock() <= 0) {
             return ResponseVo.error(ResponseEnum.PROODUCT_STOCK_ERROR);
         }
 

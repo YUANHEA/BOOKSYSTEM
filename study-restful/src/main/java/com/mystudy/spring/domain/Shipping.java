@@ -1,5 +1,6 @@
 package com.mystudy.spring.domain;
 
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -7,70 +8,60 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.math.BigDecimal;
 import java.util.Date;
 
+/**
+ * 收货地址
+ *
+ * **/
 @Data
 @EntityListeners(AuditingEntityListener.class)
 @Entity
-@Table(name = "book_all")
-public class Book {
+@Table(name = "book_shipping")
+public class Shipping {
 
     @Id
-    @NotNull
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Integer bookId;
+    private Integer id;
 
-    @Column(name = "category_id")
-    private Integer categoryId;
+    @Column(name = "user_id")
+    private Integer userId;
 
-    private String name;
+    @Column(name = "receiver_name")
+    private String receiverName;
 
-//    图片地址
-    private String cover;
+    @Column(name = "receiver_phone")
+    private String receiverPhone;
 
-    private BigDecimal price;
+    @Column(name = "receiver_mobile")
+    private String receiverMobile;
 
-//    简介
-    private String intro;
+    @Column(name = "receiver_province")
+    private String receiverProvince;
 
-    private String auther;
+    @Column(name = "receiver_city")
+    private String receiverCity;
 
-//    出版社
-    private String press;
+    @Column(name = "receiver_district")
+    private String receiverDistrict;
 
-//    发行时间
-    @JsonFormat(pattern = "yyyy-MM-dd",timezone="GMT+8")
-    private Date pubdate;
+    @Column(name = "receiver_address")
+    private String receiverAddress;
 
-//    数量
-    private Integer stock;
-
-    //销售状态
-    private Integer status;
-
-//
-    private Integer special;
-
-//
-    private Integer news;
-
-//促销
-    private Integer sale;
+    @Column(name = "receiver_zip")
+    private String receiverZip;
 
     //    前台正常时间戳
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "createtime")
+    @Column(name = "create_time")
     private Date createTime;
 
     //    前台正常时间戳
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updatetime")
+    @Column(name = "update_time")
     private Date updateTime;
-
 }
