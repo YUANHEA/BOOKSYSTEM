@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 @Transactional
 public interface ShippingRepository extends JpaRepository<Shipping,Integer> {
@@ -21,4 +22,6 @@ public interface ShippingRepository extends JpaRepository<Shipping,Integer> {
 //    void updateNameById(@Param("id") Long id, @Param("name") String name);
 
     public List<Shipping> findByUserId(Integer uid);
+
+    List<Shipping> findByIdIn(Set<Integer> shippingIdSet);
 }

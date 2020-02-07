@@ -31,10 +31,11 @@ public class OrderController {
     @ApiOperation(value="订单List", notes="订单状态:" +
             "0-已取消-10-未付款，20-已付款，40-已发货，50-交易成功，60-交易关闭")
     @GetMapping("/orders")
-    public ResponseVo<PageInfo> list(@RequestParam Integer pageNum,
-                                     @RequestParam Integer pageSize,
+    public ResponseVo<PageInfo> list(@RequestParam("pageNum") Integer pageNum,
+                                     @RequestParam("pageSize") Integer pageSize,
                                      HttpSession session){
-        return null;
+        User user = (User) session.getAttribute(ApiConst.USER_DATA);
+        return orderService.list(user.getId(),pageNum,pageSize);
     }
 
     @ApiOperation(value="订单详情", notes="订单详情")

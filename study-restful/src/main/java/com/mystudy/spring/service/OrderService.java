@@ -8,6 +8,7 @@ import com.mystudy.spring.enums.OrderStatusEnum;
 import com.mystudy.spring.enums.PaymentTypeEnum;
 import com.mystudy.spring.enums.ResponseEnum;
 import com.mystudy.spring.repository.CartRepository;
+import com.mystudy.spring.repository.OrderItemRepository;
 import com.mystudy.spring.repository.OrderRepository;
 import com.mystudy.spring.repository.ShippingRepository;
 import com.mystudy.spring.vo.ResponseVo;
@@ -26,6 +27,9 @@ import java.util.stream.Collectors;
 public class OrderService {
     @Autowired
     private OrderRepository orderRepository;
+
+    @Autowired
+    private OrderItemRepository orderItemRepository;
 
     @Autowired
     private ShippingRepository shippingRepository;
@@ -102,6 +106,13 @@ public class OrderService {
         }
 
 
+
+        List<OrderItem> rowForOrderItem = orderItemRepository.save(orderItemList);
+        if (rowForOrderItem == null) {
+            return ResponseVo.error(ResponseEnum.ERROR);
+        }
+
+
         //更新购物车（选中的商品）
         //Redis有事务(打包命令)，不能回滚
         for (Cart cart : cartList) {
@@ -120,11 +131,28 @@ public class OrderService {
         Set<Long> orderNoSet = orderList.stream()
                 .map(Order::getOrderNo)
                 .collect(Collectors.toSet());
-        List<OrderItem> orderItemList = orderRepository.findByOrderNoIn(orderNoSet);
+        List<OrderItem> orderItemList = orderItemRepository.findByOrderNoIn(orderNoSet);
         Map<Long, List<OrderItem>> orderItemMap = orderItemList.stream()
                 .collect(Collectors.groupingBy(OrderItem::getOrderNo));
 
-        return null;
+        Set<Integer> shippingIdSet = orderList.stream()
+                .map(Order::getShippingId)
+                .collect(Collectors.toSet());
+        List<Shipping> shippingList = shippingRepository.findByIdIn(shippingIdSet);
+        Map<Integer, Shipping> shippingMap = shippingList.stream()
+                .collect(Collectors.toMap(Shipping::getId, shipping -> shipping));
+
+        List<OrderVo> orderVoList = new ArrayList<>();
+        for (Order order : orderList) {
+            OrderVo orderVo = buildOrderVo(order,
+                    orderItemMap.get(order.getOrderNo()),
+                    shippingMap.get(order.getShippingId()));
+            orderVoList.add(orderVo);
+        }
+        PageInfo pageInfo = new PageInfo<>(orderList);
+        pageInfo.setList(orderVoList);
+
+        return ResponseVo.success(pageInfo);
     }
 
         /*
