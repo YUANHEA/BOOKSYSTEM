@@ -75,7 +75,7 @@ public class Order {
     private Date endTime;
 
     /*
-    * 交易关闭时间  
+    * 交易关闭时间
     * */
     @Column(name = "close_time")
     private Date closeTime;
