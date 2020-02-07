@@ -31,7 +31,9 @@ public class OrderController {
     @ApiOperation(value="订单List", notes="订单状态:" +
             "0-已取消-10-未付款，20-已付款，40-已发货，50-交易成功，60-交易关闭")
     @GetMapping("/orders")
-    public ResponseVo<PageInfo> list(){
+    public ResponseVo<PageInfo> list(@RequestParam Integer pageNum,
+                                     @RequestParam Integer pageSize,
+                                     HttpSession session){
         return null;
     }
 

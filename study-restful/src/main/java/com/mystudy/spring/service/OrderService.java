@@ -1,5 +1,7 @@
 package com.mystudy.spring.service;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.mystudy.spring.domain.*;
 import com.mystudy.spring.enums.BookStatusEnum;
 import com.mystudy.spring.enums.OrderStatusEnum;
@@ -111,7 +113,21 @@ public class OrderService {
         return ResponseVo.success(orderVo);
     }
 
-    /*
+    public ResponseVo<PageInfo> list(Integer uid, Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<Order> orderList = orderRepository.findByUserId(uid);
+
+        Set<Long> orderNoSet = orderList.stream()
+                .map(Order::getOrderNo)
+                .collect(Collectors.toSet());
+        List<OrderItem> orderItemList = orderRepository.findByOrderNoIn(orderNoSet);
+        Map<Long, List<OrderItem>> orderItemMap = orderItemList.stream()
+                .collect(Collectors.groupingBy(OrderItem::getOrderNo));
+
+        return null;
+    }
+
+        /*
     * 订单号生成
     * */
     private Long generateOrderNo() {
