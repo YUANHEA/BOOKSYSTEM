@@ -2,6 +2,7 @@ package com.mystudy.spring.exception;
 
 import java.io.Serializable;
 
+
 public class myResult <T> implements Serializable {
     /**
      * 错误内容

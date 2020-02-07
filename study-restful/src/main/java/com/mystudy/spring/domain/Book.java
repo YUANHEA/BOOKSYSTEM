@@ -27,36 +27,36 @@ public class Book {
 
     private String name;
 
-    //    图片地址
+//    图片地址
     private String cover;
 
     private BigDecimal price;
 
-    //    简介
+//    简介
     private String intro;
 
     private String auther;
 
-    //    出版社
+//    出版社
     private String press;
 
-    //    发行时间
+//    发行时间
     @JsonFormat(pattern = "yyyy-MM-dd",timezone="GMT+8")
-    private Integer pubdate;
+    private Date pubdate;
 
-    //    数量
+//    数量
     private Integer stock;
 
     //销售状态
     private Integer status;
 
-    //
+//
     private Integer special;
 
-    //
+//
     private Integer news;
 
-    //促销
+//促销
     private Integer sale;
 
     //    前台正常时间戳

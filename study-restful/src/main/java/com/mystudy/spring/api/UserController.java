@@ -1,10 +1,13 @@
 package com.mystudy.spring.api;
 
 import com.fengwenyi.javalib.result.Result;
+import com.mystudy.spring.ApiConst.ApiConst;
 import com.mystudy.spring.domain.User;
+import com.mystudy.spring.enums.ResponseEnum;
 import com.mystudy.spring.exception.myResult;
 import com.mystudy.spring.form.UserLoginForm;
 import com.mystudy.spring.service.UserService;
+import com.mystudy.spring.vo.ResponseVo;
 import io.swagger.annotations.ApiOperation;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,47 +29,47 @@ public class UserController
 
     @ApiOperation(value="用户登录", notes="用户登录")
     @PostMapping(value = "/user/login")
-    public Result userLogin(@RequestBody UserLoginForm userLoginform,HttpServletRequest request){
+    public ResponseVo userLogin(@RequestBody UserLoginForm userLoginform, HttpServletRequest request){
         User user = (User)userService.login(userLoginform);
         System.out.println(userLoginform.toString());
         if(user!=null){
             HttpSession session = request.getSession();
             user.setPassword("null");
-            session.setAttribute("userdata",user);
+            session.setAttribute(ApiConst.USER_DATA,user);
             System.out.println(session);
-            return  Result.success(user);
+            return  ResponseVo.success(user);
         }else{
-            return Result.error(1,"密码或用户名错误");
+            return ResponseVo.error(ResponseEnum.PASSWORD_ERROR);
         }
     }
 
     @ApiOperation(value="用户注册", notes="用户注册")
     @PostMapping(value = "/user/register")
-    public Result userRegister(@RequestBody User user){
+    public ResponseVo userRegister(@RequestBody User user){
         if(userService.addUser(user)!=null){
-            return  Result.error(0,"注册成功");
+            return  ResponseVo.success(0,"注册成功");
         }else{
-            return Result.error(1,"用户名已存在");
+            return ResponseVo.error(1,"用户名已存在");
         }
     }
 
     @ApiOperation(value="获取登录用户信息", notes="获取登录用户信息")
     @GetMapping(value = "/user")
-    public Result userInfo(HttpServletRequest request) {
+    public ResponseVo userInfo(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        return Result.success(session.getAttribute("userdata"));
+        return ResponseVo.success(session.getAttribute(ApiConst.USER_DATA));
 
     }
     @ApiOperation(value="退出登录", notes="退出登录")
     @PostMapping(value = "/user/logout")
-    public Result logout(HttpServletRequest request){
+    public ResponseVo logout(HttpServletRequest request){
         try {
             HttpSession session = request.getSession();
             session.removeAttribute("userdata");
         }catch (Exception e){
-            return Result.error(1,"服务器异常");
+            return ResponseVo.error(1,"服务器异常");
         }finally {
-            return Result.error(0,"退出成功");
+            return ResponseVo.error(0,"退出成功");
         }
     }
 
@@ -112,9 +115,9 @@ public class UserController
 
     @ApiOperation(value="测试")
     @GetMapping(value = "/test")
-    public myResult test()
+    public Result test()
     {
-        return myResult.success(0,"校验成功");
+        return Result.success();
     }
 
     @ApiOperation(value="测试")
