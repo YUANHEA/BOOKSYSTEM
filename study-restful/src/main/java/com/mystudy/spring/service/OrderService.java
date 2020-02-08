@@ -92,7 +92,7 @@ public class OrderService {
 
             //减库存
             book.setStock(book.getStock() - cart.getQuantity());
-            cartRepository.saveAndFlush(book);
+            cartRepository.save(book);
 
         }
 
@@ -128,10 +128,14 @@ public class OrderService {
         PageHelper.startPage(pageNum, pageSize);
         List<Order> orderList = orderRepository.findByUserId(uid);
 
+        System.out.println(orderList);
+
         Set<Long> orderNoSet = orderList.stream()
                 .map(Order::getOrderNo)
                 .collect(Collectors.toSet());
         List<OrderItem> orderItemList = orderItemRepository.findByOrderNoIn(orderNoSet);
+
+
         Map<Long, List<OrderItem>> orderItemMap = orderItemList.stream()
                 .collect(Collectors.groupingBy(OrderItem::getOrderNo));
 
@@ -155,6 +159,42 @@ public class OrderService {
         return ResponseVo.success(pageInfo);
     }
 
+    public ResponseVo<OrderVo> detail(Integer uid, Long orderNo) {
+        Order order = orderRepository.findByOrderNo(orderNo);
+        if (order == null || !order.getUserId().equals(uid)) {
+            return ResponseVo.error(ResponseEnum.ORDER_NOT_EXIST);
+        }
+        Set<Long> orderNoSet = new HashSet<>();
+        orderNoSet.add(order.getOrderNo());
+        List<OrderItem> orderItemList = orderItemRepository.findByOrderNoIn(orderNoSet);
+
+        Shipping shipping = shippingRepository.findOne(order.getShippingId());
+
+        OrderVo orderVo = buildOrderVo(order, orderItemList, shipping);
+        return ResponseVo.success(orderVo);
+    }
+
+    public ResponseVo cancel(Integer uid, Long orderNo) {
+
+        Order order = orderRepository.findByOrderNo(orderNo);
+        if (order == null || !order.getUserId().equals(uid)) {
+            return ResponseVo.error(ResponseEnum.ORDER_NOT_EXIST);
+        }
+        //只有[未付款]订单可以取消，看自己公司业务
+        if (!order.getStatus().equals(OrderStatusEnum.NO_PAY.getCode())) {
+            return ResponseVo.error(ResponseEnum.ORDER_STATUS_ERROR);
+        }
+
+        order.setStatus(OrderStatusEnum.CANCELED.getCode());
+        order.setCloseTime(new Date());
+        Order row = orderRepository.save(order);
+        if (row == null) {
+            return ResponseVo.error(1,"更新地址失败");
+        }
+
+        return ResponseVo.success();
+    }
+
         /*
     * 订单号生成
     * */
@@ -166,7 +206,7 @@ public class OrderService {
         OrderItem item = new OrderItem();
         item.setUserId(uid);
         item.setOrderNo(orderNo);
-        item.setUserId(book.getBookId());
+        item.setBookId(book.getBookId());
         item.setBookName(book.getName());
         item.setBookImage(book.getCover());
         item.setCurrentUnitPrice(book.getPrice());
@@ -178,7 +218,7 @@ public class OrderService {
     private OrderVo buildOrderVo(Order order, List<OrderItem> orderItemList, Shipping shipping) {
         OrderVo orderVo = new OrderVo();
         BeanUtils.copyProperties(order, orderVo);
-
+        System.out.println(orderItemList);
         List<OrderItemVo> OrderItemVoList = orderItemList.stream().map(e -> {
             OrderItemVo orderItemVo = new OrderItemVo();
             BeanUtils.copyProperties(e, orderItemVo);

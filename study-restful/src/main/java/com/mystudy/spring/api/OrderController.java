@@ -40,13 +40,17 @@ public class OrderController {
 
     @ApiOperation(value="订单详情", notes="订单详情")
     @GetMapping("/orders/{orderNo}")
-    public ResponseVo<OrderVo> detail(){
-        return null;
+    public ResponseVo<OrderVo> detail(@PathVariable Long orderNo,
+                                      HttpSession session){
+        User user = (User) session.getAttribute(ApiConst.USER_DATA);
+        return orderService.detail(user.getId(), orderNo);
     }
 
     @ApiOperation(value="取消订单", notes="取消订单")
     @PutMapping("/orders/{orderNo}")
-    public ResponseVo cancel(){
-        return null;
+    public ResponseVo cancel(@PathVariable Long orderNo,
+                             HttpSession session){
+        User user = (User) session.getAttribute(ApiConst.USER_DATA);
+        return orderService.cancel(user.getId(), orderNo);
     }
 }
