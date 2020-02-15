@@ -1,6 +1,6 @@
 package com.mystudy.spring.exception;
 
-import com.fengwenyi.javalib.result.Result;
+//import com.fengwenyi.javalib.result.Result;
 import com.mystudy.spring.enums.ResponseEnum;
 import com.mystudy.spring.vo.ResponseVo;
 import org.springframework.web.bind.annotation.ControllerAdvice;

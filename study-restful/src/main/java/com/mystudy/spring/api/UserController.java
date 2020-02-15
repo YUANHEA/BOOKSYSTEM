@@ -1,10 +1,9 @@
 package com.mystudy.spring.api;
 
-import com.fengwenyi.javalib.result.Result;
+//import com.fengwenyi.javalib.result.Result;
 import com.mystudy.spring.ApiConst.ApiConst;
 import com.mystudy.spring.domain.User;
 import com.mystudy.spring.enums.ResponseEnum;
-import com.mystudy.spring.exception.myResult;
 import com.mystudy.spring.form.UserLoginForm;
 import com.mystudy.spring.service.UserService;
 import com.mystudy.spring.vo.ResponseVo;
@@ -14,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.util.Map;
 
 /**
  * 用户控制
@@ -113,18 +111,18 @@ public class UserController
 
 
 
-    @ApiOperation(value="测试")
-    @GetMapping(value = "/test")
-    public Result test()
-    {
-        return Result.success();
-    }
-
-    @ApiOperation(value="测试")
-    @GetMapping(value = "/test1")
-    public Result test1()
-    {
-
-        return Result.success(userService.getUserList());
-    }
+//    @ApiOperation(value="测试")
+//    @GetMapping(value = "/test")
+//    public Result test()
+//    {
+//        return Result.success();
+//    }
+//
+//    @ApiOperation(value="测试")
+//    @GetMapping(value = "/test1")
+//    public Result test1()
+//    {
+//
+//        return Result.success(userService.getUserList());
+//    }
 }
