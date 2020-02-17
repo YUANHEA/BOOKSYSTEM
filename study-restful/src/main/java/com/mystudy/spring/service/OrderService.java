@@ -253,5 +253,23 @@ public class OrderService {
         order.setStatus(OrderStatusEnum.NO_PAY.getCode());
         return order;
     }
+
+    public void paid(Long orderNo){
+
+        Order order = orderRepository.findByOrderNo(orderNo);
+        if (order == null) {
+            throw new RuntimeException(ResponseEnum.ORDER_NOT_EXIST.getMsg());
+        }
+        //只有[未付款]订单可以变成[已付款]
+        if (!order.getStatus().equals(OrderStatusEnum.NO_PAY.getCode())) {
+            throw new RuntimeException(ResponseEnum.ORDER_STATUS_ERROR.getMsg());
+        }
+        order.setStatus(OrderStatusEnum.PAID.getCode());
+        order.setPaymentTime(new Date());
+        Order row = orderRepository.save(order);
+        if (row == null) {
+            throw new RuntimeException("将订单更新为已支付状态失败，订单号：" + orderNo);
+        }
+    }
 }
 

@@ -1,0 +1,42 @@
+Manifest-Version: 1.0
+Class-Path: mysql-connector-java-5.1.46.jar pagehelper-5.1.4.jar sprin
+ g-boot-starter-1.5.14.RELEASE.jar tomcat-jdbc-8.5.31.jar log4j-over-s
+ lf4j-1.7.25.jar spring-aspects-4.3.18.RELEASE.jar spring-plugin-core-
+ 1.2.0.RELEASE.jar springfox-core-2.9.2.jar spring-core-4.3.18.RELEASE
+ .jar springfox-schema-2.9.2.jar tomcat-annotations-api-8.5.31.jar map
+ struct-1.2.0.Final.jar spring-plugin-metadata-1.2.0.RELEASE.jar jcl-o
+ ver-slf4j-1.7.25.jar spring-data-commons-1.13.13.RELEASE.jar fastjson
+ -1.2.25.jar jul-to-slf4j-1.7.25.jar swagger-annotations-1.5.20.jar sp
+ ring-jdbc-4.3.18.RELEASE.jar tomcat-juli-8.5.31.jar spring-boot-start
+ er-data-redis-1.5.9.RELEASE.jar spring-boot-starter-web-1.5.14.RELEAS
+ E.jar spring-boot-starter-tomcat-1.5.14.RELEASE.jar spring-expression
+ -4.3.18.RELEASE.jar jedis-2.9.0.jar spring-context-4.3.18.RELEASE.jar
+  aspectjweaver-1.8.13.jar snakeyaml-1.17.jar spring-beans-4.3.18.RELE
+ ASE.jar spring-boot-starter-jdbc-1.5.14.RELEASE.jar jackson-databind-
+ 2.8.11.2.jar spring-oxm-4.3.13.RELEASE.jar swagger-models-1.5.20.jar 
+ tomcat-embed-core-8.5.31.jar dom4j-1.6.1.jar spring-amqp-2.1.8.RELEAS
+ E.jar springfox-swagger-ui-2.9.2.jar jandex-1.2.2.Final.jar spring-me
+ ssaging-5.1.9.RELEASE.jar spring-rabbit-2.1.8.RELEASE.jar hibernate-e
+ ntitymanager-5.0.12.Final.jar classmate-1.4.0.jar javassist-3.23.1-GA
+ .jar javax.transaction-api-1.2.jar geronimo-jta_1.1_spec-1.1.1.jar sp
+ ring-web-4.3.18.RELEASE.jar hibernate-commons-annotations-5.0.0.Final
+ .jar spring-aop-4.3.18.RELEASE.jar tomcat-embed-websocket-8.5.31.jar 
+ spring-retry-1.2.4.RELEASE.jar hibernate-core-5.0.1.Final.jar springf
+ ox-spring-web-2.9.2.jar spring-data-redis-1.8.9.RELEASE.jar xml-apis-
+ 1.0.b2.jar antlr-2.7.7.jar byte-buddy-1.8.12.jar hibernate-validator-
+ 5.3.6.Final.jar guava-20.0.jar jackson-annotations-2.8.0.jar spring-d
+ ata-jpa-1.11.13.RELEASE.jar tomcat-embed-el-8.5.31.jar jackson-core-2
+ .8.10.jar spring-boot-starter-aop-1.5.14.RELEASE.jar jsqlparser-1.0.j
+ ar spring-boot-starter-logging-1.5.14.RELEASE.jar logback-classic-1.1
+ .11.jar springfox-swagger-common-2.9.2.jar amqp-client-5.4.3.jar spri
+ ng-webmvc-4.3.18.RELEASE.jar logback-core-1.1.11.jar spring-data-keyv
+ alue-1.2.9.RELEASE.jar spring-context-support-4.3.13.RELEASE.jar vali
+ dation-api-1.1.0.Final.jar spring-boot-autoconfigure-1.5.14.RELEASE.j
+ ar spring-boot-starter-amqp-2.1.7.RELEASE.jar hibernate-jpa-2.1-api-1
+ .0.0.Final.jar jboss-logging-3.3.0.Final.jar spring-boot-starter-data
+ -jpa-1.5.14.RELEASE.jar lombok-1.18.4.jar spring-tx-4.3.18.RELEASE.ja
+ r commons-pool2-2.4.2.jar springfox-swagger2-2.9.2.jar slf4j-api-1.7.
+ 25.jar springfox-spi-2.9.2.jar spring-orm-4.3.18.RELEASE.jar spring-b
+ oot-1.5.14.RELEASE.jar
+Main-Class: com.mystudy.spring.UserApplication
+

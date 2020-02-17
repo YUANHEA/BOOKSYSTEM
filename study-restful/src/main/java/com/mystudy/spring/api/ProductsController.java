@@ -25,7 +25,7 @@ public class ProductsController {
                               @RequestParam(required = false) String keyword,
                               @RequestParam(defaultValue = "1") String pageNum,
                               @RequestParam(defaultValue = "10") String pageSize,
-                              @RequestParam(defaultValue = "price_asc") String orderBy) {
+                              @RequestParam(defaultValue = "createTime_asc") String orderBy) {
 
         Integer cId = null;
         Integer pNum = 1;
@@ -55,7 +55,7 @@ public class ProductsController {
         }
         String orderBy_field = temp[0];
         String orderBy_rule = temp[1];
-        if ((!orderBy_field.equals("price") && !orderBy_field.equals("auther")) ||
+        if ((!orderBy_field.equals("price") && !orderBy_field.equals("auther") && !orderBy_field.equals("createTime")) ||
                 (!orderBy_rule.equalsIgnoreCase("ASC") && !orderBy_rule.equalsIgnoreCase("DESC"))) {
 //            return Result.error(1, "orderBy参数错误，正确：升序：price_asc，降序：price_desc，暂支持price、auther排序！");
             return ResponseVo.error(ResponseEnum.PARAM_ERROR);
