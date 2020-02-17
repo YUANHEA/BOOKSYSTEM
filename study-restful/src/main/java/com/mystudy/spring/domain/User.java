@@ -32,7 +32,13 @@ public class User {
     @Column(length = 255)
     private String phone;
 
-    private int role;
+    @Column(length = 20)
+    private String true_name;
+
+    @Column(length = 20)
+    private String id_card;
+
+    private Integer role;
 
     /**
      * 更新时间

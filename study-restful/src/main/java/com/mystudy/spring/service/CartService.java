@@ -106,7 +106,6 @@ public class CartService {
         Integer quantity = 1;
 
         Book book = cartRepository.findOne(form.getBookId());
-        System.out.println(book);
 
         if (book == null) {
             return ResponseVo.error(ResponseEnum.PRODUCT_NOT_EXIST);

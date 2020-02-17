@@ -38,6 +38,10 @@ public enum  ResponseEnum {
     ORDER_NOT_EXIST(19, "订单不存在"),
 
     ORDER_STATUS_ERROR(20, "订单状态有误"),
+
+    RELEASE_ROLE_ERROR(21, "未实名认证"),
+
+    RELEASE_PICTURE_ERROR(22, "图片保存失败"),
     ;
 
     Integer code;
