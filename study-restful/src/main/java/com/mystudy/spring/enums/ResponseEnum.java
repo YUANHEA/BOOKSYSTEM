@@ -38,6 +38,12 @@ public enum  ResponseEnum {
     ORDER_NOT_EXIST(19, "订单不存在"),
 
     ORDER_STATUS_ERROR(20, "订单状态有误"),
+
+    PAY_METHOD_NO_SUPPORT(30, "支付方式暂不支持"),
+
+    PAYINFO_NO_EXIST(31, "该支付记录不存在"),
+
+    PAYINFO_NO_REPEAT(32, "一个订单暂时只能发起一次支付"),
     ;
 
     Integer code;
