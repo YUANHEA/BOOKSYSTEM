@@ -58,7 +58,6 @@ public class UserService
         user.setRole(UserRoleEnum.REAL_USER.getCode());
         user.setId_card(form.getId_card());
         user.setTrue_name(form.getTrue_name());
-        userRepository.save(user);
-        return ResponseVo.success();
+        return ResponseVo.success(userRepository.save(user));
     }
 }

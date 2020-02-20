@@ -15,7 +15,5 @@ public class UserAuthenticationform {
 
     private String true_name;
 
-    private MultipartFile o_picture;
-
-    private MultipartFile r_picture;
+    private MultipartFile picture;
 }

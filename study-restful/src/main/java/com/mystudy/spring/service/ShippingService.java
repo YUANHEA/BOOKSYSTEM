@@ -10,8 +10,6 @@ import com.mystudy.spring.vo.ResponseVo;
 import org.hibernate.engine.jdbc.spi.SqlExceptionHelper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -59,10 +57,11 @@ public class ShippingService {
         return ResponseVo.success();
     }
 
-    public ResponseVo list(Integer uid, Integer pageNum, Integer pageSize) {
-        Pageable pageable = new PageRequest(pageNum, pageSize);
-        Iterable<Shipping> shippings = shippingRepository.findByUserId(uid,pageable);
-        return ResponseVo.success(shippings);
+    public ResponseVo<PageInfo> list(Integer uid, Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<Shipping> shippings = shippingRepository.findByUserId(uid);
+        PageInfo pageInfo = new PageInfo(shippings);
+        return ResponseVo.success(pageInfo);
     }
 
     public ResponseVo getOneShipping(Integer id,Integer uid){

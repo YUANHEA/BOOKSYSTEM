@@ -14,8 +14,6 @@ import com.mystudy.spring.repository.ShippingRepository;
 import com.mystudy.spring.vo.ResponseVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -126,8 +124,8 @@ public class OrderService {
         return ResponseVo.success(orderVo);
     }
 
-    public ResponseVo list(Integer uid, Integer pageNum, Integer pageSize) {
-        Pageable pageable = new PageRequest(pageNum, pageSize);
+    public ResponseVo<PageInfo> list(Integer uid, Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
         List<Order> orderList = orderRepository.findByUserId(uid);
 
         System.out.println(orderList);
