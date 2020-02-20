@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.mystudy.spring.domain.Book;
 import com.mystudy.spring.domain.Cart;
+import com.mystudy.spring.domain.User;
 import com.mystudy.spring.enums.BookStatusEnum;
 import com.mystudy.spring.enums.ResponseEnum;
 import com.mystudy.spring.form.CartAddForm;
@@ -37,6 +38,9 @@ public class CartService {
     @Autowired
     public StringRedisTemplate stringRedisTemplate;
 
+    @Autowired
+    private UserService userService;
+
 
     private JSONObject object = new JSONObject();
 
@@ -59,6 +63,7 @@ public class CartService {
             System.out.println("list_cart:"+cart);
 
             Book book = cartRepository.findOne(bookId);
+            User user = userService.findUserByBookId(bookId);
             if(book != null){
                 CartBookVo cartBookVo = new CartBookVo(bookId,
                         cart.getQuantity(),
@@ -76,7 +81,8 @@ public class CartService {
                         book.getStatus(),
                         book.getPrice().multiply(BigDecimal.valueOf(cart.getQuantity())),
                         book.getStock(),
-                        cart.getBookSelected()
+                        cart.getBookSelected(),
+                        user
                 );
                 cartBookVoList.add(cartBookVo);
 

@@ -63,6 +63,8 @@ public class CartBookVo {
 
     private Integer bookStock;
 
+    private User user;
+
     /**
      * 商品是否选中
      */
@@ -72,7 +74,7 @@ public class CartBookVo {
     public CartBookVo() {
     }
 
-    public CartBookVo(int bookId, Integer quantity, String bookName, String cover, BigDecimal price, String intro, String auther, String press, Date pubdate, Integer stock, Integer special, Integer news, Integer sale, Integer status, BigDecimal bookTotalPrice, Integer bookStock, Boolean bookSelected) {
+    public CartBookVo(int bookId, Integer quantity, String bookName, String cover, BigDecimal price, String intro, String auther, String press, Date pubdate, Integer stock, Integer special, Integer news, Integer sale, Integer status, BigDecimal bookTotalPrice, Integer bookStock, Boolean bookSelected, User user) {
         this.bookId = bookId;
         this.quantity = quantity;
         this.bookName = bookName;
@@ -90,5 +92,6 @@ public class CartBookVo {
         this.bookTotalPrice = bookTotalPrice;
         this.bookStock = bookStock;
         this.bookSelected = bookSelected;
+        this.user = user;
     }
 }

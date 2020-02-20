@@ -42,6 +42,10 @@ public class UserService
     public List<User> getUserList() {
         return userRepository.findAll();
 }
+
+    public User findUserByBookId(Integer bid){
+        return userRepository.findUserByBookId(bid);
+    }
 //
 //    public Object getUser(String id) throws NotFoundException
 //    {

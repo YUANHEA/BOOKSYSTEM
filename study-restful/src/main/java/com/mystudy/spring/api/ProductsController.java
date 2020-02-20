@@ -2,8 +2,10 @@ package com.mystudy.spring.api;
 
 //import com.fengwenyi.javalib.result.Result;
 import com.mystudy.spring.domain.Book;
+import com.mystudy.spring.domain.User;
 import com.mystudy.spring.enums.ResponseEnum;
 import com.mystudy.spring.service.ProductsService;
+import com.mystudy.spring.service.UserService;
 import com.mystudy.spring.vo.ResponseVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,7 +22,10 @@ public class ProductsController {
     @Autowired
     private ProductsService productsService;
 
-    @GetMapping("/")
+    @Autowired
+    private UserService userService;
+
+    @GetMapping("")
     public ResponseVo getProducts(@RequestParam(required = false) String categoryId,
                               @RequestParam(required = false) String keyword,
                               @RequestParam(defaultValue = "1") String pageNum,
@@ -98,10 +103,14 @@ public class ProductsController {
             return ResponseVo.error(ResponseEnum.PARAM_ERROR);
         }
         Book book = productsService.getBookById(pid);
+        User user = userService.findUserByBookId(pid);
+        Map<String, Object> map = new HashMap<>();
+        map.put("book", book);
+        map.put("user", user);
         if (book == null){
 //            return Result.error(1,"该商品已下架或删除");
             return ResponseVo.error(ResponseEnum.PARAM_ERROR);
         }
-        return ResponseVo.success(book);
+        return ResponseVo.success(map);
     }
 }
