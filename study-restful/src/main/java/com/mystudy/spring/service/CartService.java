@@ -22,6 +22,7 @@ import org.springframework.util.StringUtils;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -51,13 +52,20 @@ public class CartService {
         BigDecimal cartTotalPrice = BigDecimal.ZERO;
         CartVo cartVo = new CartVo();
         List<CartBookVo> cartBookVoList = new ArrayList<>();
+        List<Cart> cartListSort = new ArrayList<>();
         for (Map.Entry<String, String> entry : entries.entrySet()) {
-            Integer bookId = Integer.valueOf(entry.getKey());
+
 //            JSONObject obj = JSON.parseObject(entry.getValue());
             Cart cart = JSON.parseObject(entry.getValue(),Cart.class);
 
-            System.out.println("list_cart:"+cart);
 
+           cartListSort.add(cart);
+        }
+
+        Collections.sort(cartListSort);
+
+        for(Cart cart : cartListSort){
+            Integer bookId = cart.getBookId();
             Book book = cartRepository.findOne(bookId);
             if(book != null){
                 CartBookVo cartBookVo = new CartBookVo(bookId,
@@ -79,7 +87,6 @@ public class CartService {
                         cart.getBookSelected()
                 );
                 cartBookVoList.add(cartBookVo);
-
                 if(!cart.getBookSelected()){
                     selectAll = false;
                 }
@@ -97,6 +104,7 @@ public class CartService {
         cartVo.setSelectedAll(selectAll);
         cartVo.setCartTotalQuantity(cartTotalQuantity);
         cartVo.setCartTotalPrice(cartTotalPrice);
+        Collections.reverse(cartBookVoList);
         cartVo.setCartBookVoList(cartBookVoList);
 
         return ResponseVo.success(cartVo);

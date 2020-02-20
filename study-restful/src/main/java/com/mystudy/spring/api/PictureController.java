@@ -33,6 +33,11 @@ public class PictureController {
         outputStream.close();
     }
 
+    @PostMapping("/getImage/save")
+    public String sava(@RequestParam MultipartFile file){
+        return  pictureService.savePicture(file);
+    }
+
 //    @PostMapping("/getImage/unloadImage")
 //    public String uploadImage( UserAuthenticationform form)  {
 //        MultipartFile image = form.getPicture();
