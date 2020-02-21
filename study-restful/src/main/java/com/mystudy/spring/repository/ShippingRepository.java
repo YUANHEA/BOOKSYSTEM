@@ -2,6 +2,8 @@ package com.mystudy.spring.repository;
 
 import com.mystudy.spring.domain.Shipping;
 import jdk.nashorn.internal.runtime.SharedPropertyMap;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -21,7 +23,7 @@ public interface ShippingRepository extends JpaRepository<Shipping,Integer> {
 //    @Query(value = "update user set name = :name where id = :id",nativeQuery = true)
 //    void updateNameById(@Param("id") Long id, @Param("name") String name);
 
-    public List<Shipping> findByUserId(Integer uid);
+    Page<Shipping> findByUserId(Integer uid, Pageable pageable);
 
     List<Shipping> findByIdIn(Set<Integer> shippingIdSet);
 }

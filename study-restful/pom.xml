@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.mystudy.spring</groupId>
+    <artifactId>study-restful</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <name>study-restful</name>
+
+
     <repositories>
         <repository>
             <id>alimaven</id>
@@ -16,21 +25,6 @@
             </snapshots>
         </repository>
     </repositories>
-    <modelVersion>4.0.0</modelVersion>
-
-    <groupId>com.mystudy.spring</groupId>
-    <artifactId>study-restful</artifactId>
-    <version>1.0-SNAPSHOT</version>
-
-    <name>study-restful</name>
-
-
-    <!--<repositories>-->
-        <!--<repository>-->
-            <!--<id>jitpack.io</id>-->
-            <!--<url>https://jitpack.io</url>-->
-        <!--</repository>-->
-    <!--</repositories>-->
 
    <!-- FIXME change it to the project's website -->
     <!--<url>http://www.example.com</url>-->
@@ -138,10 +132,17 @@
             <artifactId>hibernate-core</artifactId>
             <version>5.0.1.Final</version>
         </dependency>
+
+        <!--<dependency>-->
+            <!--<groupId>com.github.pagehelper</groupId>-->
+            <!--<artifactId>pagehelper</artifactId>-->
+            <!--<version>5.1.4</version>-->
+        <!--</dependency>-->
+
         <dependency>
             <groupId>com.github.pagehelper</groupId>
-            <artifactId>pagehelper</artifactId>
-            <version>5.1.4</version>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+            <version>1.2.5</version>
         </dependency>
 
         <!--<dependency>-->
@@ -206,4 +207,5 @@
             </resource>
         </resources>
     </build>
+
 </project>

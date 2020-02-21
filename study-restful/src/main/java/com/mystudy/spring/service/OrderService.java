@@ -7,13 +7,12 @@ import com.mystudy.spring.enums.BookStatusEnum;
 import com.mystudy.spring.enums.OrderStatusEnum;
 import com.mystudy.spring.enums.PaymentTypeEnum;
 import com.mystudy.spring.enums.ResponseEnum;
-import com.mystudy.spring.repository.CartRepository;
-import com.mystudy.spring.repository.OrderItemRepository;
-import com.mystudy.spring.repository.OrderRepository;
-import com.mystudy.spring.repository.ShippingRepository;
+import com.mystudy.spring.repository.*;
 import com.mystudy.spring.vo.ResponseVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -39,6 +38,9 @@ public class OrderService {
 
     @Autowired
     private CartRepository cartRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Transactional
     public ResponseVo<OrderVo> create(Integer uid, Integer shippingId) {
@@ -124,8 +126,9 @@ public class OrderService {
         return ResponseVo.success(orderVo);
     }
 
-    public ResponseVo<PageInfo> list(Integer uid, Integer pageNum, Integer pageSize) {
-        PageHelper.startPage(pageNum, pageSize);
+    public ResponseVo list(Integer uid, Integer pageNum, Integer pageSize) {
+        Pageable pageable = new PageRequest(pageNum, pageSize);
+        PageHelper.startPage(pageNum,pageSize);
         List<Order> orderList = orderRepository.findByUserId(uid);
 
         System.out.println(orderList);
@@ -212,6 +215,9 @@ public class OrderService {
         item.setCurrentUnitPrice(book.getPrice());
         item.setQuantity(quantity);
         item.setTotalPrice(book.getPrice().multiply(BigDecimal.valueOf(quantity)));
+        User seller = userRepository.findUserByBookId(book.getBookId());
+        item.setSellerId(seller.getId());
+        item.setSellerName(seller.getUsername());
         return item;
     }
 
@@ -251,6 +257,9 @@ public class OrderService {
         order.setPaymentType(PaymentTypeEnum.PAY_ONLINE.getCode());
         order.setPostage(0);
         order.setStatus(OrderStatusEnum.NO_PAY.getCode());
+        User seller = userRepository.findUserByBookId(shippingId);
+        order.setSellerId(seller.getId());
+        order.setSellerName(seller.getUsername());
         return order;
     }
 

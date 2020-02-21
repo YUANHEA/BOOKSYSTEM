@@ -1,9 +1,11 @@
 package com.mystudy.spring.api;
 
-//import com.fengwenyi.javalib.result.Result;
+
 import com.mystudy.spring.ApiConst.ApiConst;
 import com.mystudy.spring.domain.User;
 import com.mystudy.spring.enums.ResponseEnum;
+import com.mystudy.spring.exception.myResult;
+import com.mystudy.spring.form.UserAuthenticationform;
 import com.mystudy.spring.form.UserLoginForm;
 import com.mystudy.spring.service.UserService;
 import com.mystudy.spring.vo.ResponseVo;
@@ -72,57 +74,13 @@ public class UserController
     }
 
 
+    @ApiOperation(value="身份验证")
+    @PostMapping(value = "/user/auth")
+    public ResponseVo authentication(@RequestBody UserAuthenticationform form,
+                                 HttpSession session) {
+        User user = (User) session.getAttribute(ApiConst.USER_DATA);
+        return userService.authentication(user.getId(),form);
+    }
 
 
-
-//    @ApiOperation(value="获取用户列表", notes="获取用户列表")
-//    @GetMapping(value = "/users")
-//    public List<User> getUserList()
-//    {
-//        return userService.getUserList();
-//    }
-//
-//    @ApiOperation(value="添加用户", notes="添加用户")
-//    @PostMapping(value = "/users")
-//    public Object addUser(@RequestBody User user){
-//        return userService.addUser(user);
-//    }
-//
-//    @ApiOperation(value="获取用户信息", notes="根据id获取用户信息")
-//    @GetMapping(value = "/users/{id}")
-//    public Object getUser(@PathVariable("id") String id) throws NotFoundException
-//    {
-//        return userService.getUser(id);
-//    }
-//
-//    @ApiOperation(value="删除用户", notes="根据id删除用户")
-//    @DeleteMapping(value = "/users/{id}")
-//    public void deleteUser(@PathVariable("id") String id)
-//    {
-//        userService.deleteUser(id);
-//    }
-//
-//    @ApiOperation(value="更新用户", notes="更新用户")
-//    @PatchMapping(value = "/users/{id}")
-//    public User updateUser(@PathVariable("id") String id, @RequestBody User user)
-//    {
-//        return userService.update(id, user);
-//    }
-
-
-
-//    @ApiOperation(value="测试")
-//    @GetMapping(value = "/test")
-//    public Result test()
-//    {
-//        return Result.success();
-//    }
-//
-//    @ApiOperation(value="测试")
-//    @GetMapping(value = "/test1")
-//    public Result test1()
-//    {
-//
-//        return Result.success(userService.getUserList());
-//    }
 }

@@ -11,6 +11,7 @@ import com.mystudy.spring.form.CartAddForm;
 import com.mystudy.spring.form.CartUpdateForm;
 import com.mystudy.spring.repository.CartRepository;
 import com.mystudy.spring.domain.CartBookVo;
+import com.mystudy.spring.repository.UserRepository;
 import com.mystudy.spring.vo.CartVo;
 import com.mystudy.spring.vo.ResponseVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ import org.springframework.util.StringUtils;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -44,6 +46,9 @@ public class CartService {
 
     private JSONObject object = new JSONObject();
 
+    @Autowired
+    public UserRepository userRepository;
+
 
     public ResponseVo<CartVo> list(Integer uid){
         HashOperations<String, String, String> opsForHash = stringRedisTemplate.opsForHash();
@@ -55,16 +60,24 @@ public class CartService {
         BigDecimal cartTotalPrice = BigDecimal.ZERO;
         CartVo cartVo = new CartVo();
         List<CartBookVo> cartBookVoList = new ArrayList<>();
+        List<Cart> cartListSort = new ArrayList<>();
         for (Map.Entry<String, String> entry : entries.entrySet()) {
-            Integer bookId = Integer.valueOf(entry.getKey());
+
 //            JSONObject obj = JSON.parseObject(entry.getValue());
             Cart cart = JSON.parseObject(entry.getValue(),Cart.class);
 
-            System.out.println("list_cart:"+cart);
 
+           cartListSort.add(cart);
+        }
+
+        Collections.sort(cartListSort);
+
+        for(Cart cart : cartListSort){
+            Integer bookId = cart.getBookId();
             Book book = cartRepository.findOne(bookId);
             User user = userService.findUserByBookId(bookId);
             if(book != null){
+                User user = userRepository.findUserByBookId(bookId);
                 CartBookVo cartBookVo = new CartBookVo(bookId,
                         cart.getQuantity(),
                         book.getName(),
@@ -82,10 +95,10 @@ public class CartService {
                         book.getPrice().multiply(BigDecimal.valueOf(cart.getQuantity())),
                         book.getStock(),
                         cart.getBookSelected(),
-                        user
+                        user.getId(),
+                        user.getUsername()
                 );
                 cartBookVoList.add(cartBookVo);
-
                 if(!cart.getBookSelected()){
                     selectAll = false;
                 }
@@ -103,6 +116,7 @@ public class CartService {
         cartVo.setSelectedAll(selectAll);
         cartVo.setCartTotalQuantity(cartTotalQuantity);
         cartVo.setCartTotalPrice(cartTotalPrice);
+        Collections.reverse(cartBookVoList);
         cartVo.setCartBookVoList(cartBookVoList);
 
         return ResponseVo.success(cartVo);
@@ -112,7 +126,6 @@ public class CartService {
         Integer quantity = 1;
 
         Book book = cartRepository.findOne(form.getBookId());
-        System.out.println(book);
 
         if (book == null) {
             return ResponseVo.error(ResponseEnum.PRODUCT_NOT_EXIST);

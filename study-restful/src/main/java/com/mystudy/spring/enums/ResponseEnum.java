@@ -44,6 +44,9 @@ public enum  ResponseEnum {
     PAYINFO_NO_EXIST(31, "该支付记录不存在"),
 
     PAYINFO_NO_REPEAT(32, "一个订单暂时只能发起一次支付"),
+    RELEASE_ROLE_ERROR(21, "未实名认证"),
+
+    RELEASE_PICTURE_ERROR(22, "图片保存失败"),
     ;
 
     Integer code;
