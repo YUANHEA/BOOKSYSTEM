@@ -1,6 +1,6 @@
 package com.mystudy.spring.api;
 
-import com.fengwenyi.javalib.result.Result;
+
 import com.mystudy.spring.ApiConst.ApiConst;
 import com.mystudy.spring.domain.User;
 import com.mystudy.spring.enums.ResponseEnum;
@@ -83,18 +83,5 @@ public class UserController
         return userService.authentication(user.getId(),form);
     }
 
-    @ApiOperation(value="测试")
-    @GetMapping(value = "/test")
-    public Result test()
-    {
-        return Result.success();
-    }
 
-    @ApiOperation(value="测试")
-    @GetMapping(value = "/test1")
-    public Result test1()
-    {
-
-        return Result.success(userService.getUserList());
-    }
 }

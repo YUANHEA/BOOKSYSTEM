@@ -4,12 +4,14 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.mystudy.spring.domain.Book;
 import com.mystudy.spring.domain.Cart;
+import com.mystudy.spring.domain.User;
 import com.mystudy.spring.enums.BookStatusEnum;
 import com.mystudy.spring.enums.ResponseEnum;
 import com.mystudy.spring.form.CartAddForm;
 import com.mystudy.spring.form.CartUpdateForm;
 import com.mystudy.spring.repository.CartRepository;
 import com.mystudy.spring.domain.CartBookVo;
+import com.mystudy.spring.repository.UserRepository;
 import com.mystudy.spring.vo.CartVo;
 import com.mystudy.spring.vo.ResponseVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +43,9 @@ public class CartService {
 
     private JSONObject object = new JSONObject();
 
+    @Autowired
+    public UserRepository userRepository;
+
 
     public ResponseVo<CartVo> list(Integer uid){
         HashOperations<String, String, String> opsForHash = stringRedisTemplate.opsForHash();
@@ -68,6 +73,7 @@ public class CartService {
             Integer bookId = cart.getBookId();
             Book book = cartRepository.findOne(bookId);
             if(book != null){
+                User user = userRepository.findUserByBookId(bookId);
                 CartBookVo cartBookVo = new CartBookVo(bookId,
                         cart.getQuantity(),
                         book.getName(),
@@ -84,7 +90,9 @@ public class CartService {
                         book.getStatus(),
                         book.getPrice().multiply(BigDecimal.valueOf(cart.getQuantity())),
                         book.getStock(),
-                        cart.getBookSelected()
+                        cart.getBookSelected(),
+                        user.getId(),
+                        user.getUsername()
                 );
                 cartBookVoList.add(cartBookVo);
                 if(!cart.getBookSelected()){

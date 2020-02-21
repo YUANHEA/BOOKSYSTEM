@@ -1,6 +1,6 @@
 package com.mystudy.spring.api;
 
-import com.fengwenyi.javalib.util.IdUtil;
+
 import com.mystudy.spring.form.UserAuthenticationform;
 import com.mystudy.spring.service.PictureService;
 import com.mystudy.spring.vo.ResponseVo;

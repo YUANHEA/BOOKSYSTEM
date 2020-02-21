@@ -23,4 +23,9 @@ public class OrderItemVo {
     private BigDecimal totalPrice;
 
     private Date createTime;
+
+
+    private Integer sellerId;
+
+    private String sellerName;
 }

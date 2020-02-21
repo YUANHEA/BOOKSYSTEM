@@ -80,6 +80,12 @@ public class Order {
     @Column(name = "close_time")
     private Date closeTime;
 
+    @Column(name = "seller_id")
+    private Integer sellerId;
+
+    @Column(name = "seller_name")
+    private String sellerName;
+
     //    前台正常时间戳
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     @UpdateTimestamp
